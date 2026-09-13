@@ -4,6 +4,7 @@ import { byCountry } from 'country-code-lookup';
 import { Observable } from 'rxjs';
 import { FavoriteCityListService } from '../services/favorite-city-list.service';
 import { ForecastService } from '../services/forecast/forecast.service';
+import { DayTimeService } from '../services/day-time.service';
 import { WeekDays } from '../shared/enums/weekdays.enum';
 import { Month } from '../shared/enums/months.enum';
 
@@ -28,7 +29,8 @@ export class WeekForecastComponent implements OnInit {
     private _router: Router,
     private favoriteCityListService: FavoriteCityListService,
     private forecastService: ForecastService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private dayTimeService: DayTimeService
   ) {
     this.route.params.subscribe(params => this.searchQuery = params['city']);
   }
@@ -46,6 +48,7 @@ export class WeekForecastComponent implements OnInit {
   getForecast() {
     this.forecastData = this.forecastService.getDayForecast(this.searchQuery, 3);
     this.forecastData.subscribe((data: any) => {
+      this.dayTimeService.setLocalTime(data.location.localtime);
       this.currentCity = data.location.name;
       this.currentCountry = byCountry(data.location.country)?.iso2 ?? 'null';
       if (data.location.country === 'United States of America') {

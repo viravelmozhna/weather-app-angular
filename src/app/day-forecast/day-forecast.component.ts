@@ -2,6 +2,7 @@ import { Component, DoCheck, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FavoriteCityListService } from '../services/favorite-city-list.service';
 import { ForecastService } from '../services/forecast/forecast.service';
+import { DayTimeService } from '../services/day-time.service';
 import { Observable } from 'rxjs';
 import { byCountry } from 'country-code-lookup';
 import { WeekDays } from '../shared/enums/weekdays.enum';
@@ -31,7 +32,8 @@ export class DayForecastComponent implements OnInit, DoCheck {
     private favoriteCityListService: FavoriteCityListService,
     private _router: Router,
     private forecastService: ForecastService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private dayTimeService: DayTimeService
   ) {
     this.route.params.subscribe(params => this.searchQuery = params['city']);
   }
@@ -61,6 +63,7 @@ export class DayForecastComponent implements OnInit, DoCheck {
   getForecast() {
     this.forecastData = this.forecastService.getDayForecast(this.searchQuery, 1);
     this.forecastData.subscribe((data: any) => {
+      this.dayTimeService.setLocalTime(data.location.localtime);
       this.currentCity = data.location.name;
       this.currentCountry = byCountry(data.location.country)?.iso2 ?? 'null';
       if (data.location.country === 'United States of America') {
