@@ -1,7 +1,5 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { AfterContentChecked, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { LocalStorageThemeService } from './services/local-storage/local-storage-theme.service';
-import { Observable } from 'rxjs';
-import { WeatherService } from './services/weather.service';
 import { LoaderService } from './services/loader.service';
 import { DayTimeService } from './services/day-time.service';
 
@@ -12,17 +10,15 @@ import { DayTimeService } from './services/day-time.service';
   styleUrls: ['./app.component.scss']
 })
   
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterContentChecked {
   isDarkMode!: boolean;
 
   public backgroundClassName: string = '';
   public title: string = 'SoulTeam Weather';
-  public currentWeatherData: Observable<Object> = new Observable();
   public isLoading: boolean = true;
 
   constructor(
     public localStorageThemeService: LocalStorageThemeService,
-    private weatherService: WeatherService,
     private changeDetector: ChangeDetectorRef,
     private dayTimeService: DayTimeService,
     private loaderService: LoaderService) { }
@@ -31,15 +27,10 @@ export class AppComponent implements OnInit {
     const currentTheme: string | null = this.localStorageThemeService.getCurrentTheme();
     this.isDarkMode = currentTheme === 'dark';
 
-    const currentLocationCoords: any = null // get from navigator.geolocation.getCurrentPosition;
-    const defaultCity: string = 'Lviv';
-    const locationQuery: string = currentLocationCoords ?? defaultCity;
-
-    this.currentWeatherData = this.weatherService.getCurrentWeather(locationQuery);
-
-    this.currentWeatherData.subscribe((data: any) => {
-      this.backgroundClassName = this.dayTimeService.getBackgroundClassName(data.location.localtime);
-    });
+    // Pages report the local time of the city they show
+    this.dayTimeService.backgroundClassName.subscribe(
+      (className: string) => this.backgroundClassName = className
+    );
 
     this.loaderService.isLoading.subscribe(
       (isLoading: boolean) => this.isLoading = isLoading

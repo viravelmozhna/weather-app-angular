@@ -38,7 +38,7 @@ Built by Team Soul during an Angular internship in 2022.
 git clone https://github.com/viravelmozhna/weather-app-angular.git
 cd weather-app-angular
 npm ci
-npm run startDev
+npm start
 ```
 
 The app opens at http://localhost:4200.
@@ -56,10 +56,11 @@ The app needs a free API key from [WeatherAPI.com](https://www.weatherapi.com/si
 
 | Command | What it does |
 |---|---|
-| `npm run startDev` | Starts the dev server and opens the app in your browser |
+| `npm start` | Starts the dev server and opens the app in your browser |
 | `npm run build` | Builds for production into `dist/weather-app` |
 | `npm run watch` | Rebuilds on every change (development build) |
 | `npm test` | Runs unit tests with Karma and Jasmine |
+| `npm run lint` | Lints TypeScript and templates with ESLint |
 
 ## Pages
 

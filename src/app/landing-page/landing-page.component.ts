@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { WeatherService } from '../services/weather.service';
+import { DayTimeService } from '../services/day-time.service';
 import { byCountry } from 'country-code-lookup';
 import { Observable, Subscription} from 'rxjs';
 
@@ -22,7 +23,7 @@ export class LandingPageComponent implements OnInit {
   isDarkMode = true;
   weekday = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
-  constructor(private weatherService: WeatherService) {
+  constructor(private weatherService: WeatherService, private dayTimeService: DayTimeService) {
   }
 
   ngOnInit(): void {    
@@ -32,6 +33,7 @@ export class LandingPageComponent implements OnInit {
       this.currentWeatherData = this.weatherService.getCurrentWeather(this.defaultCity);
     }).finally(() => {
       this.currentWeatherData.subscribe((data: any) => {
+        this.dayTimeService.setLocalTime(data.location.localtime);
         const currentDate = data.location.localtime.split(' ')[0];
         const currentDayIndex = new Date(currentDate).getDay();
         this.currentCity = data.location.name;
