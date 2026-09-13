@@ -1,68 +1,114 @@
-# Angular Internship 2022
+# Soul Weather
 
+A responsive weather app built with Angular. It shows the current weather for your location, a detailed 1-day forecast and a 3-day forecast for any city, and lets you keep a list of favorite cities.
 
-## Overview 
-During internship we will learn Angular framework and its features implementing a weather application project. The application will allow user searching through the locations, viewing a location weather, weather history, inspect detailed view, adding list of favorite locations etc.
+**Live demo:** https://weather-app-cfd72.web.app
 
-## Project setup
-Before starting working on the project make sure that the following tools are installed:
-- Editor or IDE (WebStorm, VS Code etc.)
-- Git
-- Latest LTS version of NodeJS & NPM
-- Google Chrome browser
+Built by Team Soul during an Angular internship in 2022.
 
-## API usage
-You will use https://www.weatherapi.com/ as data provider. The [API](https://www.weatherapi.com/api-explorer.aspx) and [Documentation](https://www.weatherapi.com/docs/) available. 
+## Features
 
-We generated API key: 
+- **Current weather for your location.** The app asks for your location with the browser's Geolocation API. If you don't allow it, it shows Lviv instead.
+- **City search with autocomplete.** Suggestions appear after you type 3 characters.
+- **1-day forecast.** Weather in 3-hour steps: temperature, feels like, pressure, humidity and wind.
+- **3-day forecast.** Morning, afternoon and evening conditions for each day.
+- **Favorite cities.** Tap the star on a forecast page to add a city, then open it from the header. Favorites are saved in the browser.
+- **Light and dark themes.** Your choice is remembered between visits.
+- **Time-of-day backgrounds.** The background changes for morning, day, evening and night.
+- **Animated weather icons** for every WeatherAPI condition, with separate day and night versions.
+- **Mobile layouts** for every page.
 
-    b88614b3fb684e8b996104153220302
+## Tech stack
 
-to be used in your requests.
-As a requirement from API provider you have to include
+- [Angular 13](https://angular.io/), TypeScript and RxJS
+- SCSS
+- [Angular Material](https://material.angular.io/), used only for the search autocomplete
+- [WeatherAPI.com](https://www.weatherapi.com/) for weather data
+- [Firebase Hosting](https://firebase.google.com/docs/hosting), deployed with GitHub Actions
 
-    Powered by <a href="https://www.weatherapi.com/" title="Weather API">WeatherAPI.com</a>``
+## Getting started
 
+### Requirements
 
-## Minimal Requirements
-The application layout must contain:
-1. Header
-2. Main that depends on the current URL
-3. Footer
-4. Loader for each page
+- Node.js 22 (the version used in CI) and npm
 
-### Simple landing page
-Page URL - '/'.
+### Install and run
 
-The page must include:
-1. Default location current weather (location from chrome/or marked as default from local storage)
-2. 'Search' input and button
-3. Fancy background
-4. Footer
+```bash
+git clone https://github.com/viravelmozhna/weather-app-angular.git
+cd weather-app-angular
+npm ci
+npm run startDev
+```
 
-### Weather details page 
-Page URL - '/details/${city}'.
+The app opens at http://localhost:4200.
 
-This should show detailed information about weather for selected city.
-User should be able to add/remove city to Favorites list.
+### API key
 
-### Weather forecast page 
-Page URL - '/forecast/${city}/${date}'.
+The app needs a free API key from [WeatherAPI.com](https://www.weatherapi.com/signup.aspx). Put it in `apiKey` in both environment files:
 
-This should show forecast for selected city and date
+- `src/environments/environment.ts` (development)
+- `src/environments/environment.prod.ts` (production build)
 
-## Nice to have requirements
-You can choose any or take them all:
-1. Show weather forecast as a chart for selected period.
-2. Add support for history view (like a forecast and as chart).
-3. Add theme support (based on your design - pink/blue or white/dark modes as example).
-4. Integrate with Google maps (or any other map provider) to show the selected city on Details page.
-5. Responsive design (should be mobile-friendly).
+> The key ships to the browser in the app's JavaScript, like any key in a frontend-only app. Use a free-tier key, not one tied to a paid plan.
 
-## Constraints
-- No UI libraries allowed (like Bootstrap, Angular Material etc.)
-- You can use libraries for charts, maps, fonts, icons etc.
-- All other libraries must be confirmed with mentor.
+## Scripts
 
-## Design
-There are no requirements for the application design at all. Be creative!
+| Command | What it does |
+|---|---|
+| `npm run startDev` | Starts the dev server and opens the app in your browser |
+| `npm run build` | Builds for production into `dist/weather-app` |
+| `npm run watch` | Rebuilds on every change (development build) |
+| `npm test` | Runs unit tests with Karma and Jasmine |
+
+## Pages
+
+| URL | Page |
+|---|---|
+| `/` | Current weather for your location |
+| `/details/:city` | 1-day forecast for a city |
+| `/forecast/:city` | 3-day forecast for a city |
+
+## Project structure
+
+```
+src/
+├── app/
+│   ├── landing-page/        # Current weather (home page)
+│   ├── day-forecast/        # 1-day forecast page
+│   ├── week-forecast/       # 3-day forecast page
+│   ├── header/              # Logo, search, favorites, theme switch
+│   ├── search/              # City search with autocomplete
+│   ├── favorite-list/       # Favorite cities dropdown
+│   ├── footer/
+│   ├── loader/              # Loading animation
+│   ├── services/            # WeatherAPI calls, favorites, theme, loader state
+│   └── shared/enums/        # Weekday and month names
+├── http-interceptors/       # Shows the loader while requests are in flight
+├── environments/            # API URL and key
+├── assets/images/           # Backgrounds, UI icons, weather icons
+└── styles/                  # Global styles and variables
+```
+
+## Deployment
+
+The app is hosted on Firebase Hosting (project `weather-app-cfd72`).
+
+- **Every push to `main`** builds the app and deploys it to the live site ([workflow](.github/workflows/firebase-hosting-merge.yml)).
+- **Every pull request** gets a temporary preview link, posted as a comment on the PR ([workflow](.github/workflows/firebase-hosting-pull-request.yml)).
+
+To deploy manually instead:
+
+```bash
+npm run build
+firebase deploy --only hosting
+```
+
+## Credits
+
+- Weather data from [WeatherAPI.com](https://www.weatherapi.com/)
+- Built by Team Soul as part of the Angular Internship 2022
+
+## License
+
+[MIT](LICENSE)
