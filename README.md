@@ -4,7 +4,7 @@ A responsive weather app built with Angular. It shows the current weather for yo
 
 **Live demo:** https://weather-app-cfd72.web.app
 
-Built by Team Soul during an Angular internship in 2022.
+Built by Team Soul during an Angular internship in 2022. I designed the UI in Figma and implemented it in Angular, RxJS and SCSS, including the API integration and theme switching.
 
 ## Features
 
